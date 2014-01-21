@@ -14,7 +14,7 @@ requires = (
     'velruse',
     )
 
-setup(name='voteit.',
+setup(name='voteit.velruse',
       version='0.1dev',
       description='Enables different third party logins for VoteIT through Velruse',
       long_description=README + '\n\n' +  CHANGES,
@@ -33,7 +33,7 @@ setup(name='voteit.',
       zip_safe=False,
       install_requires = requires,
       tests_require= requires,
-      test_suite="voteit.",
+      test_suite="voteit.velruse",
       entry_points = """\
       """,
 #Entry points:
