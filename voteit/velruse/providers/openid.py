@@ -1,5 +1,3 @@
-import colander
-import deform
 from betahaus.viewcomponent import view_action
 from betahaus.pyracont.factories import createContent
 from pyramid.renderers import render
@@ -19,9 +17,9 @@ class OpenID(AuthPlugin):
 
     def appstruct(self, auth_info):
         result = dict(
-            oauth_token = auth_info['credentials']['oauthAccessToken'],
-            oauth_userid = auth_info['profile']['accounts'][0]['userid'],
+            openid_username = auth_info['profile']['accounts'][0]['username'],
         )
+        #FIXME: Make this configurable through attribute exchange...
         try:
             result['email'] = auth_info['profile']['verifiedEmail']
         except KeyError:
@@ -29,8 +27,7 @@ class OpenID(AuthPlugin):
         return result
   
     def login(self, appstruct):
-        raise Exception()
-        user = self.context.users.get_auth_domain_user(self.name, 'oauth_userid', appstruct['oauth_userid'])
+        user = self.context.users.get_auth_domain_user(self.name, 'openid_username', appstruct['openid_username'])
         if user:
             headers = remember(self.request, user.userid)
             url = appstruct.get('came_from', None)
@@ -41,19 +38,17 @@ class OpenID(AuthPlugin):
         raise UserNotFoundError()
  
     def register(self, appstruct):
-        raise Exception()
         name = appstruct.pop('userid')
         obj = createContent('User', creators=[name], **appstruct)
         self.context.users[name] = obj
         self.set_auth_domain(obj, self.name)
 
     def set_auth_domain(self, user, domain, **kw):
-        raise Exception()
         assert domain == self.name
         assert IUser.providedBy(user)
         auth_info = get_auth_info(self.request)
         reg_data = self.appstruct(auth_info)
-        kw['oauth_userid'] = reg_data['oauth_userid']
+        kw['openid_username'] = reg_data['openid_username']
         user.auth_domains[self.name] = kw
 
 def add_openid_from_settings(config, prefix='velruse.openid.'):
