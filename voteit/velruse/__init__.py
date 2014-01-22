@@ -37,13 +37,14 @@ def includeme(config):
 
 def configure_providers(config):
     import ConfigParser
+    from paste.deploy.loadwsgi import NicerConfigParser
     from os.path import isfile
     settings = config.registry.settings
     file_name = settings.get('velruse_providers', 'etc/velruse_providers.ini')
     if not isfile(file_name):
         print u"voteit.velruse can't find any login providers file at: %s - won't add or configure any providers" % file_name
         return
-    parser = ConfigParser.RawConfigParser()
+    parser = ConfigParser.ConfigParser()
     parser.read(file_name)
     if 'velruse_providers' not in parser.sections():
         raise ValueError("Couldn't find any section with [velruse_providers] - see voteit.velruse documentation on configuration.")
