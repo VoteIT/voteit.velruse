@@ -1,0 +1,5 @@
+Hello world from ${provider}!
+
+<form action="${login_url}" method="post">
+    <input type="submit" value="${provider}" />
+</form>
