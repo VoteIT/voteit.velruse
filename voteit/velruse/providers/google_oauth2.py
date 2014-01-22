@@ -44,6 +44,7 @@ class GoogleOAuth2(AuthPlugin):
         obj = createContent('User', creators=[name], **appstruct)
         self.context.users[name] = obj
         self.set_auth_domain(obj, self.name)
+        return obj
 
     def set_auth_domain(self, user, domain, **kw):
         assert domain == self.name
