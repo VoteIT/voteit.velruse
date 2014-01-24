@@ -6,7 +6,7 @@ from voteit.velruse import VoteITVelruseTSF as _
 class GoogleProfileImagePlugin(ProfileImagePlugin):
     name = u'google_oauth2'
     title = _('Google')
-    description = _(u"Your google plofile image.")
+    description = _(u"Your google profile image.")
 
     def url(self, size):
         if not 'google_oauth2' in self.context.auth_domains:
