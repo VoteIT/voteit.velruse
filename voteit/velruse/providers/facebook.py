@@ -7,26 +7,26 @@ from voteit.velruse import VoteITVelruseTSF as _
 from voteit.velruse.models import BaseOAuth2Plugin
 
 
-class GoogleOAuth2(BaseOAuth2Plugin):
-    name = 'google_oauth2'
+class FacebookAuth(BaseOAuth2Plugin):
+    name = 'facebook'
 
 
-@view_action('login_forms', 'google_oauth2', title = _(u"Google"))
+@view_action('login_forms', 'facebook', title = _(u"Facebook"))
 def login_va(context, request, va, **kw):
     api = kw['api']
     if not api.userid:
         response = {'provider': va.name,
-                    'login_url': login_url(request, 'google')}
+                    'login_url': login_url(request, 'facebook')}
         return render("templates/generic.pt", response, request = request)
 
-@view_action('connect_forms', 'google_oauth2', title = _(u"Google"))
+@view_action('connect_forms', 'facebook', title = _(u"Facebook"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
         response = {'provider': va.name,
-                    'login_url': login_url(request, 'google')}
+                    'login_url': login_url(request, 'facebook')}
         return render("templates/generic.pt", response, request = request)
 
 def includeme(config):
-    config.registry.registerAdapter(GoogleOAuth2, name = GoogleOAuth2.name)
+    config.registry.registerAdapter(FacebookAuth, name = FacebookAuth.name)
     config.scan()
