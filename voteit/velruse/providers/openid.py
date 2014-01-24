@@ -80,4 +80,4 @@ def connect_va(context, request, va, **kw):
 
 def includeme(config):
     config.registry.registerAdapter(OpenID, name = OpenID.name)
-    config.scan()
+    config.scan(__name__)

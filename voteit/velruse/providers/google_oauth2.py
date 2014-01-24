@@ -29,4 +29,4 @@ def connect_va(context, request, va, **kw):
 def includeme(config):
     config.registry.registerAdapter(GoogleOAuth2, name = GoogleOAuth2.name)
     config.include('voteit.velruse.image_plugins.google') #As default?
-    config.scan()
+    config.scan(__name__)

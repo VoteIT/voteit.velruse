@@ -33,4 +33,4 @@ def connect_va(context, request, va, **kw):
 
 def includeme(config):
     config.registry.registerAdapter(TwitterAuth, name = TwitterAuth.name)
-    config.scan()
+    config.scan(__name__)

@@ -28,4 +28,4 @@ def connect_va(context, request, va, **kw):
 def includeme(config):
     config.registry.registerAdapter(FacebookAuth, name = FacebookAuth.name)
     config.include('voteit.velruse.image_plugins.facebook') #As default?
-    config.scan()
+    config.scan(__name__)
