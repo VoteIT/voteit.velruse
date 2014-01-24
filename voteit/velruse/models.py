@@ -1,3 +1,4 @@
+import colander
 from betahaus.pyracont.factories import createContent
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
@@ -5,6 +6,7 @@ from voteit.core.models.auth import AuthPlugin
 from voteit.core.models.interfaces import IUser
 
 from voteit.velruse.exceptions import UserNotFoundError
+from voteit.velruse import VoteITVelruseTSF as _
 
 
 class BaseOAuth2Plugin(AuthPlugin):
@@ -31,9 +33,21 @@ class BaseOAuth2Plugin(AuthPlugin):
             raise HTTPFound(location = url,
                              headers = headers)
         raise UserNotFoundError()
- 
+
+    def modify_register_schema(self, schema):
+        schema.add(colander.SchemaNode(colander.Bool(),
+                                       name = 'use_profile_image',
+                                       title = _(u"Use profile image"),
+                                       description = _(u"use_profile_image_federated_description",
+                                                       default = u"Your profile image will be set from this service. "
+                                                           u"You can change this later of course."),
+                                       default = True))
+
     def register(self, appstruct):
         name = appstruct.pop('userid')
+        use_profile_image = appstruct.pop('use_profile_image', True)
+        if use_profile_image and 'profile_image_plugin' not in appstruct: #Ie allowed and not passed along
+            appstruct['profile_image_plugin'] = self.name #Same as plugin name so far!
         obj = createContent('User', creators=[name], **appstruct)
         self.context.users[name] = obj
         self.set_auth_domain(obj, self.name)

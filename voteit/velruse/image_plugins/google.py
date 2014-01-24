@@ -4,7 +4,7 @@ from voteit.velruse import VoteITVelruseTSF as _
 
 
 class GoogleProfileImagePlugin(ProfileImagePlugin):
-    name = u'google_profile_image'
+    name = u'google_oauth2'
     title = _('Google')
     description = _(u"Your google plofile image.")
 
