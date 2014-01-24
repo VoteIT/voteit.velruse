@@ -66,16 +66,14 @@ def add_openid_from_settings(config, prefix='velruse.openid.'):
 def login_va(context, request, va, **kw):
     api = kw['api']
     if not api.userid:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'openid')}
+        response = {'login_url': login_url(request, 'openid'), 'api': api}
         return render("templates/openid.pt", response, request = request)
 
 @view_action('connect_forms', 'openid', title = _(u"OpenID"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'openid')}
+        response = {'login_url': login_url(request, 'openid'), 'api': api}
         return render("templates/openid.pt", response, request = request)
 
 def includeme(config):

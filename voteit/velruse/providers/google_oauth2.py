@@ -14,17 +14,15 @@ class GoogleOAuth2(BaseOAuth2Plugin):
 def login_va(context, request, va, **kw):
     api = kw['api']
     if not api.userid:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'google')}
-        return render("templates/generic.pt", response, request = request)
+        response = {'login_url': login_url(request, 'google'), 'api': api}
+        return render("templates/google.pt", response, request = request)
 
 @view_action('connect_forms', 'google_oauth2', title = _(u"Google"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'google')}
-        return render("templates/generic.pt", response, request = request)
+        response = {'login_url': login_url(request, 'google'), 'api': api}
+        return render("templates/google.pt", response, request = request)
 
 def includeme(config):
     config.registry.registerAdapter(GoogleOAuth2, name = GoogleOAuth2.name)

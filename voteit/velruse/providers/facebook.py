@@ -13,17 +13,15 @@ class FacebookAuth(BaseOAuth2Plugin):
 def login_va(context, request, va, **kw):
     api = kw['api']
     if not api.userid:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'facebook')}
-        return render("templates/generic.pt", response, request = request)
+        response = {'login_url': login_url(request, 'facebook'), 'api': api}
+        return render("templates/facebook.pt", response, request = request)
 
 @view_action('connect_forms', 'facebook', title = _(u"Facebook"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'facebook')}
-        return render("templates/generic.pt", response, request = request)
+        response = {'login_url': login_url(request, 'facebook'), 'api': api}
+        return render("templates/facebook.pt", response, request = request)
 
 def includeme(config):
     config.registry.registerAdapter(FacebookAuth, name = FacebookAuth.name)

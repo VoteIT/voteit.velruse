@@ -19,17 +19,15 @@ class TwitterAuth(BaseOAuth2Plugin):
 def login_va(context, request, va, **kw):
     api = kw['api']
     if not api.userid:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'twitter')}
-        return render("templates/generic.pt", response, request = request)
+        response = {'login_url': login_url(request, 'twitter'), 'api': api}
+        return render("templates/twitter.pt", response, request = request)
 
 @view_action('connect_forms', 'twitter', title = _(u"Twitter"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
-        response = {'provider': va.name,
-                    'login_url': login_url(request, 'twitter')}
-        return render("templates/generic.pt", response, request = request)
+        response = {'login_url': login_url(request, 'twitter'), 'api': api}
+        return render("templates/twitter.pt", response, request = request)
 
 def includeme(config):
     config.registry.registerAdapter(TwitterAuth, name = TwitterAuth.name)

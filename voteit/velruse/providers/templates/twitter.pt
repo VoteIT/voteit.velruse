@@ -1,0 +1,5 @@
+<form action="${login_url}" method="post">
+    <button type="submit" class="small">
+        <span>Facebook</span>
+    </button>
+</form>
