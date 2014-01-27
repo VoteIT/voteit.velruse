@@ -17,14 +17,16 @@ def includeme(config):
     config.add_view(exception_view, context = 'openid.yadis.discover.DiscoveryFailure', permission = NO_PERMISSION_REQUIRED)
     config.add_view(exception_view, context = 'velruse.exceptions.VelruseException', permission = NO_PERMISSION_REQUIRED)
 
-def exception_view(context, request):
+def _try_to_add_error(request, msg):
     fm = request.registry.queryAdapter(request, IFlashMessages)
     if fm:
-        exc_msg = context.message
         msg = _(u"third_party_login_error",
                  default="A third party request caused an error: '${msg}'",
-                 mapping={'msg': exc_msg})
+                 mapping={'msg': msg})
         fm.add(msg, type = 'error')
+
+def exception_view(context, request):
+    _try_to_add_error(request, context.message)
     return HTTPFound(location = "/")
 
 def logged_in(context, request):
@@ -32,14 +34,11 @@ def logged_in(context, request):
         A cookie still needs to be set. Also, it's possible to run this method for a user that's
         already logged in locally, ie wanting to connect to a another service to use it as auth.
     """
-    #FIXME:
-#     error_dict = {
-#         'provider_type': context.provider_type,
-#         'provider_name': context.provider_name,
-#         'error': context.reason,
-#     }
     userid = authenticated_userid(request)
     auth_info = get_auth_info(request)
+    if 'error' in auth_info:
+        _try_to_add_error(request, auth_info['error'])
+        return HTTPFound(location = "/")
     auth_method = request.registry.queryMultiAdapter((context, request), IAuthPlugin, name = auth_info['provider_type'])
     if not userid:
         appstruct = auth_method.appstruct(auth_info)
