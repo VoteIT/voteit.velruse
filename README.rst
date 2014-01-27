@@ -1,14 +1,19 @@
 voteit.velruse: Authentication plugins for VoteIT
 =================================================
 
+.. image:: https://travis-ci.org/VoteIT/voteit.velruse.png?branch=master
+    :target: https://travis-ci.org/VoteIT/voteit.velruse
+
 Velruse handles a number of authentication methods. This package simply enables them to be used with VoteIT.
 
-This includes:
+Currently this works with:
 
 * Facebook
 * Twitter
 * Google
+* OpenID
 
-etc...
+It also adds profile image support from:
 
-XXX: TODO
+* Facebook
+* Google

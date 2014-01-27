@@ -12,7 +12,7 @@ from voteit.velruse.exceptions import UserNotFoundError
 from voteit.velruse.models import get_auth_info
 
 
-class OpenID(AuthPlugin):
+class OpenIDAuth(AuthPlugin):
     name = 'openid'
 
     def appstruct(self, auth_info):
@@ -77,5 +77,5 @@ def connect_va(context, request, va, **kw):
         return render("templates/openid.pt", response, request = request)
 
 def includeme(config):
-    config.registry.registerAdapter(OpenID, name = OpenID.name)
+    config.registry.registerAdapter(OpenIDAuth, name = OpenIDAuth.name)
     config.scan(__name__)
