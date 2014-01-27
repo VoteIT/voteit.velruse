@@ -1,16 +1,31 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import authenticated_userid
+from pyramid.security import NO_PERMISSION_REQUIRED
 from voteit.core.models.interfaces import IAuthPlugin
+from voteit.core.models.interfaces import IFlashMessages
 
 from .models import get_auth_info
 from .exceptions import UserNotFoundError
+from voteit.velruse import VoteITVelruseTSF as _
 
 
 def includeme(config):
     config.add_view(logged_in,
                     route_name='logged_in')
     config.add_route('logged_in', '/logged_in')
+    #FIXME: Add any other  generic badness...
+    config.add_view(exception_view, context = 'openid.yadis.discover.DiscoveryFailure', permission = NO_PERMISSION_REQUIRED)
+    config.add_view(exception_view, context = 'velruse.exceptions.VelruseException', permission = NO_PERMISSION_REQUIRED)
 
+def exception_view(context, request):
+    fm = request.registry.queryAdapter(request, IFlashMessages)
+    if fm:
+        exc_msg = context.message
+        msg = _(u"third_party_login_error",
+                 default="A third party request caused an error: '${msg}'",
+                 mapping={'msg': exc_msg})
+        fm.add(msg, type = 'error')
+    return HTTPFound(location = "/")
 
 def logged_in(context, request):
     """ Handle login through another service. Note that this is not the same as a local login.

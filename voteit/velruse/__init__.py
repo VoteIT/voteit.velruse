@@ -1,8 +1,11 @@
+import logging
+
 from pyramid.i18n import TranslationStringFactory
 from velruse.app import find_providers
 
 PROJECTNAME = 'voteit.velruse'
 VoteITVelruseTSF = TranslationStringFactory(PROJECTNAME)
+logger = logging.getLogger(__name__)
 
 
 def includeme(config):
@@ -36,13 +39,14 @@ def includeme(config):
     config.add_static_view('vv_static', '%s:static' % PROJECTNAME, cache_max_age = cache_ttl_seconds)
 
 def configure_providers(config):
+    logger.debug('Configuring providers')
     import ConfigParser
     from paste.deploy.loadwsgi import NicerConfigParser
     from os.path import isfile
     settings = config.registry.settings
     file_name = settings.get('velruse_providers', 'etc/velruse_providers.ini')
     if not isfile(file_name):
-        print u"voteit.velruse can't find any login providers file at: %s - won't add or configure any providers" % file_name
+        logger.warn("voteit.velruse can't find any login providers file at: %s - won't add or configure any providers" % file_name)
         return
     parser = ConfigParser.ConfigParser()
     parser.read(file_name)
@@ -66,5 +70,5 @@ def include_providers(config):
     for provider in find_providers(config.registry.settings):
         #Check for import errors or do this another way?
         name = '%s.providers.%s' % (PROJECTNAME, provider)
-        print "Including: %s" % name
+        logger.info("Including: %s" % name)
         config.include(name)
