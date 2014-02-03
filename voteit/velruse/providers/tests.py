@@ -16,7 +16,7 @@ class FacebookPluginTests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .facebook import FacebookAuth
+        from voteit.velruse.providers.facebook import FacebookAuth
         return FacebookAuth
 
     def test_verify_object(self):
@@ -37,7 +37,7 @@ class GoogleOAuth2Tests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .google_oauth2 import GoogleOAuth2
+        from voteit.velruse.providers.google_oauth2 import GoogleOAuth2
         return GoogleOAuth2
 
     def test_verify_object(self):
@@ -58,7 +58,7 @@ class OpenIDAuthTests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .openid import OpenIDAuth
+        from voteit.velruse.providers.openid import OpenIDAuth
         return OpenIDAuth
 
     def test_verify_object(self):
@@ -79,7 +79,7 @@ class TwitterAuthTests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .twitter import TwitterAuth
+        from voteit.velruse.providers.twitter import TwitterAuth
         return TwitterAuth
 
     def test_verify_object(self):

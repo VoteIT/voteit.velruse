@@ -16,7 +16,7 @@ class FacebookProfileImagePluginTests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .facebook import FacebookProfileImagePlugin
+        from voteit.velruse.image_plugins.facebook import FacebookProfileImagePlugin
         return FacebookProfileImagePlugin
 
     def test_verify_object(self):
@@ -36,7 +36,7 @@ class GoogleProfileImagePluginTests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .google import GoogleProfileImagePlugin
+        from voteit.velruse.image_plugins.google import GoogleProfileImagePlugin
         return GoogleProfileImagePlugin
 
     def test_verify_object(self):

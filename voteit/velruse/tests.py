@@ -16,7 +16,7 @@ class BaseOAuth2PluginTests(unittest.TestCase):
 
     @property
     def _cut(self):
-        from .models import BaseOAuth2Plugin
+        from voteit.velruse.models import BaseOAuth2Plugin
         return BaseOAuth2Plugin
 
     def test_verify_object(self):
