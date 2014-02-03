@@ -14,6 +14,12 @@ from voteit.velruse.models import get_auth_info
 
 class OpenIDAuth(AuthPlugin):
     name = 'openid'
+    title = _(u"OpenID")
+
+    def render_login_info(self):
+        return _login_form(self.context, self.request)
+
+    render_register_info = render_login_info
 
     def appstruct(self, auth_info):
         result = dict(
@@ -62,19 +68,15 @@ def add_openid_from_settings(config, prefix='velruse.openid.'):
     p.update('callback_path')
     config.add_openid_login(**p.kwargs)
 
-@view_action('login_forms', 'openid', title = _(u"OpenID"))
-def login_va(context, request, va, **kw):
-    api = kw['api']
-    if not api.userid:
-        response = {'login_url': login_url(request, 'openid'), 'api': api}
-        return render("templates/openid.pt", response, request = request)
+def _login_form(context, request):
+    response = {'login_url': login_url(request, 'openid')}
+    return render("templates/openid.pt", response, request = request)
 
 @view_action('connect_forms', 'openid', title = _(u"OpenID"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
-        response = {'login_url': login_url(request, 'openid'), 'api': api}
-        return render("templates/openid.pt", response, request = request)
+        return _login_form(context, request)
 
 def includeme(config):
     config.registry.registerAdapter(OpenIDAuth, name = OpenIDAuth.name)

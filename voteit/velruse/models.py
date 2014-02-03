@@ -10,7 +10,6 @@ from voteit.velruse import VoteITVelruseTSF as _
 
 
 class BaseOAuth2Plugin(AuthPlugin):
-    name = ''
 
     def appstruct(self, auth_info):
         result = dict(

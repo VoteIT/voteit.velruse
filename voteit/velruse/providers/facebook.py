@@ -7,21 +7,25 @@ from voteit.velruse.models import BaseOAuth2Plugin
 
 class FacebookAuth(BaseOAuth2Plugin):
     name = 'facebook'
+    title = _(u"Facebook")
 
+    def render_login_info(self):
+        return _login_btn(self.context, self.request)
 
-@view_action('login_forms', 'facebook', title = _(u"Facebook"))
-def login_va(context, request, va, **kw):
-    api = kw['api']
-    if not api.userid:
-        response = {'login_url': login_url(request, 'facebook'), 'api': api}
-        return render("templates/facebook.pt", response, request = request)
+    render_register_info = render_login_info
+
 
 @view_action('connect_forms', 'facebook', title = _(u"Facebook"))
 def connect_va(context, request, va, **kw):
     api = kw['api']
     if api.userid and va.name not in api.user_profile.auth_domains:
-        response = {'login_url': login_url(request, 'facebook'), 'api': api}
-        return render("templates/facebook.pt", response, request = request)
+        return _login_btn(context, request)
+
+def _login_btn(context, request):
+    response = {'login_url': login_url(request, 'facebook')}
+    return render("templates/facebook.pt", response, request = request)
+    
+
 
 def includeme(config):
     config.registry.registerAdapter(FacebookAuth, name = FacebookAuth.name)
