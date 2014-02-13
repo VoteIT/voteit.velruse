@@ -9,7 +9,7 @@ class FacebookProfileImagePlugin(ProfileImagePlugin):
     description = _(u'facebook_profile_image_description',
                     default=u"Your profile image is the same as the one you use on Facebook.")
 
-    def url(self, size):
+    def url(self, size, request):
         if not 'facebook' in self.context.auth_domains:
             return None
         oauth_userid = self.context.auth_domains['facebook'].get('oauth_userid')

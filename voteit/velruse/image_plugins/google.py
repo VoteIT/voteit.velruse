@@ -8,7 +8,7 @@ class GoogleProfileImagePlugin(ProfileImagePlugin):
     title = _('Google')
     description = _(u"Your google profile image.")
 
-    def url(self, size):
+    def url(self, size, request):
         if not 'google_oauth2' in self.context.auth_domains:
             return None
         oauth_userid = self.context.auth_domains['google_oauth2'].get('oauth_userid')
