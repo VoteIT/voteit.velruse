@@ -1,4 +1,5 @@
 import colander
+import deform
 from betahaus.pyracont.factories import createContent
 from pyramid.httpexceptions import HTTPFound
 from pyramid.security import remember
@@ -7,6 +8,12 @@ from voteit.core.models.interfaces import IUser
 
 from voteit.velruse.exceptions import UserNotFoundError
 from voteit.velruse import VoteITVelruseTSF as _
+
+
+@colander.deferred
+def deferred_token_default(node, kw):
+    request = kw['request']
+    return request.params['token']
 
 
 class BaseOAuth2Plugin(AuthPlugin):
@@ -41,8 +48,13 @@ class BaseOAuth2Plugin(AuthPlugin):
                                                        default = u"Your profile image will be set from this service. "
                                                            u"You can change this later of course."),
                                        default = True))
+        schema.add(colander.SchemaNode(colander.String(),
+                                       name = 'token',
+                                       widget = deform.widget.HiddenWidget(),
+                                       default = deferred_token_default))
 
     def register(self, appstruct):
+        appstruct.pop('token', None) #Remove if it exists
         name = appstruct.pop('userid')
         use_profile_image = appstruct.pop('use_profile_image', True)
         if use_profile_image and 'profile_image_plugin' not in appstruct: #Ie allowed and not passed along
